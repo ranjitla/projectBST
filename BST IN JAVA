@@ -1,0 +1,98 @@
+class TreeNode {
+    int data;
+    TreeNode left, right;
+
+    TreeNode(int d) {
+        data = d;
+        left = right = null;
+    }
+}
+
+public class BST {
+    public static TreeNode insert(TreeNode root, int d) {
+        if (root == null) {
+            return new TreeNode(d);
+        }
+        if (root.data < d) {
+            root.right = insert(root.right, d);
+        } else {
+            root.left = insert(root.left, d);
+        }
+        return root;
+    }
+
+    public static boolean searchBST(TreeNode root, int target) {
+        if (root == null) {
+            return false;
+        }
+        if (root.data == target) {
+            return true;
+        }
+        if (root.data < target) {
+            return searchBST(root.right, target);
+        } else {
+            return searchBST(root.left, target);
+        }
+    }
+
+    public static void print(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        print(root.left);
+        System.out.print(root.data + " ");
+        print(root.right);
+    }
+
+    public static TreeNode deletion(TreeNode root, int target) {
+        if (root == null) {
+            return null;
+        }
+        if (root.data < target) {
+            root.right = deletion(root.right, target);
+        } else if (root.data > target) {
+            root.left = deletion(root.left, target);
+        } else {
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            } else {
+                TreeNode temp = root.right;
+                while (temp.left != null) {
+                    temp = temp.left;
+                }
+                root.data = temp.data;
+                root.right = deletion(root.right, temp.data);
+            }
+        }
+        return root;
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = null;
+        root = insert(root, 10);
+        root = insert(root, 9);
+        root = insert(root, 20);
+        root = insert(root, 15);
+        root = insert(root, 25);
+        root = insert(root, 11);
+
+        System.out.print("Inorder traversal before deletion: ");
+        print(root);
+        System.out.println();
+
+        root = deletion(root, 15);
+
+        System.out.print("Inorder traversal after deletion of 15: ");
+        print(root);
+        System.out.println();
+
+        System.out.print("Search for 0 in BST: ");
+        if (searchBST(root, 0)) {
+            System.out.println("Found");
+        } else {
+            System.out.println("Not Found");
+        }
+    }
+}
